@@ -1,11 +1,12 @@
 {
   "name": "MunchieSort",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Aplicação de recomendações de comida para te livrares dos munchies",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "publish": "electron-builder --win -p always",
+    "publish-win": "electron-builder --win -p always",
+    "publish-mac": "electron-builder --mac -p always",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,22 +24,27 @@
     "electron-is-dev": "^2.0.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^5.2.1",
+    "got": "^12.4.1",
     "update-electron-app": "^2.0.1"
   },
   "devDependencies": {
     "electron-builder": "^23.3.3"
   },
   "build": {
-    "publish": [{
-      "provider": "github",
-      "repo": "MunchieSort",
-      "owner": "Asuryu"
-    }],
+    "publish": [
+      {
+        "provider": "github",
+        "repo": "MunchieSort",
+        "owner": "Asuryu"
+      }
+    ],
     "appId": "com.electron.munchiesort",
     "productName": "MunchieSort",
     "mac": {
-      "target": ["dmg", "zip"],
-      "icon": "assets/favicon.ico",
+      "target": [
+        "dmg",
+        "zip"
+      ],
       "category": "public.app-category.utilities"
     },
     "win": {
