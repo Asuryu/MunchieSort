@@ -1,2 +1,2 @@
 # MunchieSort
- Aplicação de recomendações de comida para te livrares dos munchies
+ A aplicação MunchieSort obtém os produtos mais baratos para combater os munchies
