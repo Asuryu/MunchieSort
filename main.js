@@ -1,6 +1,11 @@
 const {app, BrowserWindow} = require('electron');
+const { autoUpdater } = require("electron-updater");
+const isDev = require('electron-is-dev');
 const path = require('path');
 const fs = require('fs');
+
+autoUpdater.logger = require('electron-log');
+autoUpdater.logger.transports.file.level = 'info';
 
 function createWindow () {
     mainWindow = new BrowserWindow({
@@ -31,7 +36,12 @@ function createWindow () {
     });
 };
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+    if(!isDev) {
+        autoUpdater.checkForUpdates();
+    }
+    createWindow();
+});
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') app.quit()
@@ -40,3 +50,26 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
     if (mainWindow === null) createWindow()
 })
+
+
+autoUpdater.on('checking-for-update', () => {
+    console.log('Checking for update...');
+});
+autoUpdater.on('update-available', (info) => {
+    console.log('Update available.');
+    console.log("Version: " + info.version);
+    console.log("Release date: " + info.releaseDate);
+});
+autoUpdater.on('update-not-available', () => {
+    console.log("Update not available.");
+});
+autoUpdater.on('download-progress', (progress) => {
+    console.log(`Progress ${Math.floor(progress.percent)}%`);
+});
+autoUpdater.on('update-downloaded', (info) => {
+    console.log("Update downloaded.");
+    autoUpdater.quitAndInstall();
+});
+autoUpdater.on('error', (error) => {
+    console.log(error);
+});
