@@ -1,0 +1,24 @@
+{
+  "name": "MunchieSort",
+  "version": "1.0.0",
+  "description": "Aplicação de recomendações de comida para te livrares dos munchies",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Asuryu/MunchieSort.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Asuryu/MunchieSort/issues"
+  },
+  "homepage": "https://github.com/Asuryu/MunchieSort#readme",
+  "dependencies": {
+    "update-electron-app": "^2.0.1"
+  }
+}
