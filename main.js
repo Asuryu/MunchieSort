@@ -19,7 +19,6 @@ function createWindow () {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            webSecurity: false,
             enableRemoteModule: true
         },
         icon: __dirname + "/assets/favicon.ico"
