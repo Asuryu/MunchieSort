@@ -9,7 +9,7 @@ autoUpdater.logger.transports.file.level = 'info';
 
 Object.defineProperty(app, 'isPackaged', {
     get() {
-      return true;
+      return false;
     }
 });
 
@@ -35,9 +35,6 @@ function createWindow () {
     mainWindow.loadFile('index.html');
   
     mainWindow.webContents.openDevTools();
-
-    mainWindow.webContents.send('app-version', app.getVersion());
-    console.log(app.getVersion());
   
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -46,7 +43,7 @@ function createWindow () {
 
 };
 
-app.on('ready', () => {
+app.whenReady().then(() => {
     createWindow();
     if(isDev) {
         autoUpdater.checkForUpdates();
@@ -82,8 +79,7 @@ autoUpdater.on('error', () => {
     mainWindow.webContents.send('error');
 });
 
-ipcMain.on("asyncronous-message", function(evt, messageObj){
-    if(messageObj == "getAppVersion") {
-        evt.sender.send("asyncronous-message", app.getVersion());
-    }
-});
+//main process
+ipcMain.on('getVersion', (e) => {
+    e.reply('version', app.getVersion())
+})
