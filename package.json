@@ -1,6 +1,6 @@
 {
   "name": "munchiesort",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Aplicação de recomendações de comida para te livrares dos munchies",
   "main": "main.js",
   "scripts": {
@@ -50,7 +50,10 @@
     },
     "win": {
       "target": "nsis",
-      "icon": "assets/favicon.ico"
+      "icon": "assets/favicon.ico",
+      "publish": [
+        "github"
+      ]
     }
   }
 }

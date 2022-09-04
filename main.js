@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const { autoUpdater } = require("electron-updater");
 const isDev = require('electron-is-dev');
 const path = require('path');
@@ -23,8 +23,8 @@ function createWindow () {
         fullscreen: false,
         fullscreenable: false,
         webPreferences: {
-            nodeIntegration: true,
             contextIsolation: true,
+            nodeIntegration: true,
             enableRemoteModule: true,
             preload: path.join(__dirname, 'preload.js')
         },
@@ -35,6 +35,9 @@ function createWindow () {
     mainWindow.loadFile('index.html');
   
     mainWindow.webContents.openDevTools();
+
+    mainWindow.webContents.send('app-version', app.getVersion());
+    console.log(app.getVersion());
   
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -58,6 +61,9 @@ app.on('activate', function () {
     if (mainWindow === null) createWindow()
 })
 
+autoUpdater.on("checking-for-update", () => {
+    mainWindow.webContents.send('app-version', app.getVersion());
+});
 autoUpdater.on('update-available', (info) => {
     console.log('Update available.');
     console.log("Version: " + info.version);

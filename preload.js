@@ -5,4 +5,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onDownloadProgress: (callback) => ipcRenderer.on('download-progress', callback),
     onUpdateDownloaded: (callback) => ipcRenderer.on('update-downloaded', callback),
     onError: (callback) => ipcRenderer.on('error', callback),
+    onVersion: (callback) => ipcRenderer.on('app-version', callback),
 })
