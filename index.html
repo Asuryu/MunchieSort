@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MunchieSort</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/a1c321da30.js" crossorigin="anonymous"></script>
+    <script src="./index.js"></script>
 </head>
 <body>
-    <video id="intro-video" autoplay>
-        <source src="assets/intro.mp4" type="video/mp4">
-    </video>
-    <!-- <div id="updater">--*
+    <div id="updater" data-tilt data-tilt-max="10" data-tilt-speed="1000">
         <img src="assets/loader.gif">
-        <h1>Searching for updates</h1>
-    </div> -->
+        <h1 id="updater-text">Searching for updates</h1>
+        <p id="updater-info">Wait while we sort it out</p>
+    </div>
+    <script type="text/javascript" src="vanilla-tilt.min.js"></script>
 </body>
 </html>

@@ -7,6 +7,12 @@ const fs = require('fs');
 autoUpdater.logger = require('electron-log');
 autoUpdater.logger.transports.file.level = 'info';
 
+Object.defineProperty(app, 'isPackaged', {
+    get() {
+      return true;
+    }
+});
+
 function createWindow () {
     mainWindow = new BrowserWindow({
         width: 1280,
@@ -18,8 +24,9 @@ function createWindow () {
         fullscreenable: false,
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false,
-            enableRemoteModule: true
+            contextIsolation: true,
+            enableRemoteModule: true,
+            preload: path.join(__dirname, 'preload.js')
         },
         icon: __dirname + "/assets/favicon.ico"
     });
@@ -33,13 +40,14 @@ function createWindow () {
     mainWindow.on('closed', function () {
       app.quit();
     });
+
 };
 
 app.on('ready', () => {
+    createWindow();
     if(!isDev) {
         autoUpdater.checkForUpdates();
     }
-    createWindow();
 });
 
 app.on('window-all-closed', function () {
@@ -50,25 +58,23 @@ app.on('activate', function () {
     if (mainWindow === null) createWindow()
 })
 
-
-autoUpdater.on('checking-for-update', () => {
-    console.log('Checking for update...');
-});
 autoUpdater.on('update-available', (info) => {
     console.log('Update available.');
     console.log("Version: " + info.version);
     console.log("Release date: " + info.releaseDate);
-});
-autoUpdater.on('update-not-available', () => {
-    console.log("Update not available.");
+    mainWindow.webContents.send('update-available', info);
 });
 autoUpdater.on('download-progress', (progress) => {
     console.log(`Progress ${Math.floor(progress.percent)}%`);
+    mainWindow.webContents.send('download-progress', progress);
 });
-autoUpdater.on('update-downloaded', (info) => {
+autoUpdater.on('update-downloaded', () => {
     console.log("Update downloaded.");
-    autoUpdater.quitAndInstall();
+    mainWindow.webContents.send('update-downloaded');
+    setTimeout(() => {
+        autoUpdater.quitAndInstall();
+    }, 5000);
 });
-autoUpdater.on('error', (error) => {
-    console.log(error);
+autoUpdater.on('error', () => {
+    mainWindow.webContents.send('error');
 });
