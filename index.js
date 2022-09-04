@@ -22,8 +22,3 @@ window.electronAPI.onError((_event) => {
     document.getElementById('updater-text').innerHTML = 'An error has occurred';
     document.getElementById('updater-info').innerHTML = 'Your app could not be updated';
 })
-window.electronAPI.onVersion((_event, value) => {
-    console.log(value);
-    console.log("fdasdasdas")
-    document.getElementById('appVersion').innerHTML = value;
-})

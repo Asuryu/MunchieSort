@@ -48,7 +48,7 @@ function createWindow () {
 
 app.on('ready', () => {
     createWindow();
-    if(!isDev) {
+    if(isDev) {
         autoUpdater.checkForUpdates();
     }
 });
@@ -61,9 +61,6 @@ app.on('activate', function () {
     if (mainWindow === null) createWindow()
 })
 
-autoUpdater.on("checking-for-update", () => {
-    mainWindow.webContents.send('app-version', app.getVersion());
-});
 autoUpdater.on('update-available', (info) => {
     console.log('Update available.');
     console.log("Version: " + info.version);
@@ -83,4 +80,10 @@ autoUpdater.on('update-downloaded', () => {
 });
 autoUpdater.on('error', () => {
     mainWindow.webContents.send('error');
+});
+
+ipcMain.on("asyncronous-message", function(evt, messageObj){
+    if(messageObj == "getAppVersion") {
+        evt.sender.send("asyncronous-message", app.getVersion());
+    }
 });

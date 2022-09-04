@@ -5,5 +5,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onDownloadProgress: (callback) => ipcRenderer.on('download-progress', callback),
     onUpdateDownloaded: (callback) => ipcRenderer.on('update-downloaded', callback),
     onError: (callback) => ipcRenderer.on('error', callback),
-    onVersion: (callback) => ipcRenderer.on('app-version', callback),
 })
+
+ipcRenderer.send("asyncronous-message", "getAppVersion");
+ipcRenderer.on("asyncronous-message", function(evt, messageObj){
+    document.getElementById("appVersion").innerHTML = messageObj;
+});
