@@ -9,5 +9,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
 ipcRenderer.send("asyncronous-message", "getAppVersion");
 ipcRenderer.on("asyncronous-message", function(evt, messageObj){
-    document.getElementById("appVersion").innerHTML = messageObj;
+    var version = document.getElementById('appVersion');
+    console.log(version);
+    version.innerHTML = messageObj;
 });
