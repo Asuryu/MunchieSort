@@ -1,5 +1,5 @@
 {
-  "name": "MunchieSort",
+  "name": "munchiesort",
   "version": "1.0.3",
   "description": "Aplicação de recomendações de comida para te livrares dos munchies",
   "main": "main.js",
