@@ -1,12 +1,13 @@
 {
   "name": "munchiesort",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Aplicação de recomendações de comida para te livrares dos munchies",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "publish-win": "electron-builder --win -p always",
     "publish-mac": "electron-builder --mac -p always",
+    "publish-all": "electron-builder --mac --win -p always",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
