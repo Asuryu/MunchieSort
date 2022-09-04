@@ -7,12 +7,6 @@ const fs = require('fs');
 autoUpdater.logger = require('electron-log');
 autoUpdater.logger.transports.file.level = 'info';
 
-Object.defineProperty(app, 'isPackaged', {
-    get() {
-      return false;
-    }
-});
-
 function createWindow () {
     mainWindow = new BrowserWindow({
         width: 1280,
