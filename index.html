@@ -7,10 +7,31 @@
     <title>MunchieSort</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/a1c321da30.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
 <body>
 
-    <video autoplay id="intro-video">
+    <div id="content">
+        <navbar>
+            <img id="logo" src="assets/logo.png">
+            <i id="closeBtn" class="fa-solid fa-xmark"></i>
+        </navbar>
+    
+        <div id="grid-container">
+            <div class="card" id="id" data-tilt data-tilt-glare data-tilt-max-glare="0.1" data-tilt-max="10" data-tilt-speed="1000"></div>
+            <div class="card" id="id" data-tilt data-tilt-glare data-tilt-max-glare="0.05" data-tilt-max="10" data-tilt-speed="1000"></div>
+            <div class="card" id="id" data-tilt data-tilt-glare data-tilt-max-glare="0.05" data-tilt-max="10" data-tilt-speed="1000"></div>
+            <div class="card" id="id" data-tilt data-tilt-glare data-tilt-max-glare="0.05" data-tilt-max="10" data-tilt-speed="1000"></div>
+            <div class="card" id="id" data-tilt data-tilt-glare data-tilt-max-glare="0.05" data-tilt-max="10" data-tilt-speed="1000"></div>
+            <div class="card" id="id" data-tilt data-tilt-glare data-tilt-max-glare="0.05" data-tilt-max="10" data-tilt-speed="1000"></div>
+            <div class="card" id="id" data-tilt data-tilt-glare data-tilt-max-glare="0.05" data-tilt-max="10" data-tilt-speed="1000"></div>
+            <div class="card" id="id" data-tilt data-tilt-glare data-tilt-max-glare="0.05" data-tilt-max="10" data-tilt-speed="1000"></div>
+            <div class="card" id="id" data-tilt data-tilt-glare data-tilt-max-glare="0.05" data-tilt-max="10" data-tilt-speed="1000"></div>
+        </div>
+    </div>
+    
+
+    <video id="intro-video">
         <source src="assets/intro.webm" type="video/webm"/>
         <source src="assets/intro.mov" type="video/quicktime"/>
     </video>

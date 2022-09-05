@@ -11,7 +11,12 @@ body{
     background-color: #181818;
 }
 
+#content{
+    display: none;
+}
+
 #intro-video{
+    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -19,6 +24,7 @@ body{
 }
 
 #updater{
+    z-index: 1000;
     display: none;
     position: absolute;
     top: 50%;
@@ -58,13 +64,79 @@ body{
     left: 50%;
     transform: translate(-50%, 0%);
 }
+#updater #background{
+    z-index: 998;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #181818;
+    opacity: 1.0;
+}
 
 #appVersion{
     position: absolute;
     bottom: 10px;
     right: 10px;
-    color: #ffffff;
+    color: #757575;
     text-align: right;
     font-size: 13px;
     font-family: AdiNeueRegular;
+}
+
+navbar{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 65px;
+}
+
+#logo{
+    position: absolute;
+    top: 50%;
+    transform: translate(0%, -50%);
+    left: 10px;
+    height: 50px;
+    cursor: pointer;
+}
+
+#closeBtn{
+    z-index: 1000;
+    transition: 0.1s;
+    position: absolute;
+    top: 50%;
+    right: 25px;
+    transform: translate(0%, -50%);
+    font-size: 25px;
+    color: white;
+    cursor: pointer;
+}
+#closeBtn:hover{
+    transition: 0.2s;
+    color: #ff3434;
+}
+
+#grid-container{
+    position: absolute;
+    top: 75px;
+    left: 0;
+    width: calc(100vw - 30px);
+    height: calc(100vh - 120px);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 15px;
+}
+
+.card{
+    /* width: 250px;
+    height: 150px; */
+    border-radius: 8px;
+    background-color: #202020;
+    -webkit-box-shadow: 0px 0px 15px 0px #101010; 
+    box-shadow: 0px 0px 15px 0px #101010;
+    cursor: pointer;
 }

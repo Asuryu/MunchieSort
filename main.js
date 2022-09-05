@@ -16,6 +16,7 @@ function createWindow () {
         resizable: false,
         fullscreen: false,
         fullscreenable: false,
+        backgroundColor: '#181818',
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: true,
@@ -39,7 +40,7 @@ function createWindow () {
 
 app.whenReady().then(() => {
     createWindow();
-    if(isDev) {
+    if(!isDev) {
         autoUpdater.checkForUpdates();
     }
 });
@@ -56,8 +57,12 @@ autoUpdater.on('update-available', (info) => {
     console.log('Update available.');
     console.log("Version: " + info.version);
     console.log("Release date: " + info.releaseDate);
-    mainWindow.webContents.send('update-available', info);
+    mainWindow.webContents.send('update-available', info);  
 });
+autoUpdater.on('update-not-available', () => {
+    console.log("Update not available.");
+    mainWindow.webContents.send('update-not-available');
+})
 autoUpdater.on('download-progress', (progress) => {
     console.log(`Progress ${Math.floor(progress.percent)}%`);
     mainWindow.webContents.send('download-progress', progress);
@@ -67,7 +72,7 @@ autoUpdater.on('update-downloaded', () => {
     mainWindow.webContents.send('update-downloaded');
     setTimeout(() => {
         autoUpdater.quitAndInstall();
-    }, 5000);
+    }, 2500);
 });
 autoUpdater.on('error', () => {
     mainWindow.webContents.send('error');

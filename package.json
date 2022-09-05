@@ -1,6 +1,6 @@
 {
   "name": "munchiesort",
-  "version": "1.0.6",
+  "version": "1.1.1",
   "description": "Aplicação de recomendações de comida para te livrares dos munchies",
   "main": "main.js",
   "scripts": {
@@ -43,6 +43,7 @@
     "appId": "com.electron.munchiesort",
     "productName": "MunchieSort",
     "mac": {
+      "icon": "assets/favicon.icns",
       "target": [
         "dmg",
         "zip"
