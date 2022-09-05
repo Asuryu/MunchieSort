@@ -23,7 +23,8 @@ window.electronAPI.onUpdateDownloaded((_event) => {
     document.getElementById('updater-text').innerHTML = 'Update downloaded';
     document.getElementById('updater-info').innerHTML = "Restarting...";
 })
-window.electronAPI.onError((_event) => {
+window.electronAPI.onError((_event, error) => {
+    console.error(error);
     document.getElementById('updater').style.display = 'block';
     document.getElementById('updater-text').style.color = '#f1535a';
     document.getElementById('updater-info').style.color = '#946f71';

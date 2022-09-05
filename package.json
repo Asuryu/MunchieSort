@@ -1,6 +1,6 @@
 {
   "name": "munchiesort",
-  "version": "1.1.4",
+  "version": "1.1.13",
   "description": "A aplicação MunchieSort obtém os produtos mais baratos para combater os munchies",
   "main": "main.js",
   "scripts": {
@@ -35,8 +35,10 @@
   "build": {
     "publish": [
       {
-        "provider": "generic",
-        "url": "https://github.com/Asuryu/MunchieSort.git"
+        "provider": "github",
+        "owner": "Asuryu",
+        "repo": "MunchieSort",
+        "private": false
       }
     ],
     "appId": "com.electron.munchiesort",

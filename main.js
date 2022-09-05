@@ -74,8 +74,8 @@ autoUpdater.on('update-downloaded', () => {
         autoUpdater.quitAndInstall();
     }, 2500);
 });
-autoUpdater.on('error', () => {
-    mainWindow.webContents.send('error');
+autoUpdater.on('error', (error) => {
+    mainWindow.webContents.send('error', error);
 });
 
 //main process
