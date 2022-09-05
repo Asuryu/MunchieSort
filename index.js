@@ -8,12 +8,11 @@ window.electronAPI.onUpdateAvailable((_event, info) => {
 })
 window.electronAPI.onUpdateNotAvailable((_event) => {
     document.getElementById('updater').style.display = 'none';
-    setTimeout(() => {
-        $("#updater").fadeOut();
-        $('#intro-video').show();
-        $('#intro-video').get(0).play();
-        $('#background').fadeOut();
-    }, 2500);
+    console.log("FIXE");
+    $("#updater").fadeOut();
+    $('#intro-video').show();
+    $('#intro-video').get(0).play();
+    $('#background').fadeOut();
 })
 window.electronAPI.onDownloadProgress((_event, progress) => {
     document.getElementById('updater-text').innerHTML = 'Downloading update';
@@ -42,13 +41,32 @@ window.electronAPI.onError((_event, error) => {
 })
 
 $(document).ready(function() {
-
     var appVersion = window.electronAPI.getVersion();
+    var isDev = window.electronAPI.isDev();
+    if(!isDev){
+        $("#updater").fadeOut();
+        $('#intro-video').show();
+        $('#intro-video').get(0).play();
+        $('#background').fadeOut();
+    } else {
+        $('#intro-video').hide();
+        $('#content').show();
+        $('#background').hide();
+    }
+    
     document.getElementById("appVersion").innerHTML = appVersion;
 
     $('#intro-video').on('ended', function() {
         $('#intro-video').hide();
         $('#content').fadeIn();
         $('#background').fadeOut();
+    })
+    $("#closeBtn").click(function() {
+        window.electronAPI.closeApp();
+    })
+    $(".card").on("mouseover", function(){
+        $(this).find(" .background").css("opacity", "0.1");
+    }).on("mouseout", () => {
+        $(this).find(" .background").css("opacity", "0.0");
     })
 })

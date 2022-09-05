@@ -29,7 +29,7 @@ function createWindow () {
     // and load the index.html of the app.
     mainWindow.loadFile('index.html');
   
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
   
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -81,4 +81,10 @@ autoUpdater.on('error', (error) => {
 //main process
 ipcMain.on('getVersion', (e) => {
     e.reply('version', app.getVersion())
+})
+ipcMain.on('isDev', (e) => {
+    e.reply('dev', isDev)
+})
+ipcMain.on('closeApp', (e) => {
+    app.quit();
 })
