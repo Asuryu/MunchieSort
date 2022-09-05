@@ -8,9 +8,12 @@ window.electronAPI.onUpdateAvailable((_event, info) => {
 })
 window.electronAPI.onUpdateNotAvailable((_event) => {
     document.getElementById('updater').style.display = 'none';
-    $('#intro-video').show();
-    $('#intro-video').get(0).play();
-    $('#background').fadeOut();
+    setTimeout(() => {
+        $("#updater").fadeOut();
+        $('#intro-video').show();
+        $('#intro-video').get(0).play();
+        $('#background').fadeOut();
+    }, 2500);
 })
 window.electronAPI.onDownloadProgress((_event, progress) => {
     document.getElementById('updater-text').innerHTML = 'Downloading update';
