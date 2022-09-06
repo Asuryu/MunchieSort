@@ -11,7 +11,7 @@ urls = [
     "mercearia/bolachas-biscoitos-e-tostas/bolachas-e-biscoitos-salgados/",
     "mercearia/chocolate-gomas-e-rebucados/chocolates/",
     "mercearia/chocolate-gomas-e-rebucados/bombons/",
-    "mercearia/chocolate-gomas-e-rebucados/snacks-de-chocolate/,"
+    "mercearia/chocolate-gomas-e-rebucados/snacks-de-chocolate/",
     "mercearia/chocolate-gomas-e-rebucados/gomas-pastilhas-e-rebucados/",
     "mercearia/snacks-e-batatas-fritas/batatas-fritas/",
     "mercearia/snacks-e-batatas-fritas/aperitivos-e-snacks/",
@@ -35,11 +35,37 @@ import re
 from unittest import result
 import requests
 from bs4 import BeautifulSoup
+import json
+import matplotlib.pyplot as plt
+from PIL import Image
 
+res = {}
 i = 0
 flag = 0
+productCount = 0
 
-while(True):
+def recurse_setdefault(res, array):
+    if len(array) == 0:
+        return
+    elif len(array) == 1:
+        res.append(array[0])
+    else:
+        recurse_setdefault(res.setdefault(array[0], [] if len(array) == 2 else {}), array[1:])
+
+def search_path(res, path):
+    config = res
+    for i in path.split("/")[:-1]:
+        config = config[i]
+
+    return config
+
+for f in urls:
+    recurse_setdefault(res, f.split("/")) 
+    path = search_path(res, f)
+    path.pop(0)
+
+
+while(i < len(urls)):
     if(flag == 0):
         page = requests.get("https://www.continente.pt/" + urls[i] + "?start=0&srule=price-per-capacity")
     soup = BeautifulSoup(page.content, 'html.parser')
@@ -49,10 +75,38 @@ while(True):
 
     for product in products:
         image = product.find("picture").find("img")["data-src"]
-        marca = product.find("p", "ct-tile--brand").text
+        try:
+            marca = product.find("p", "ct-tile--brand").text
+        except:
+            marca = ""
         description = product.find("a", "ct-tile--description").text
-        preco = product.find("span", "ct-price-formatted").text
-        print(f"{marca} - {description} - {preco[2:-1]}€")
+        link = product.find("a", "ct-tile--description")["href"]
+        preco = (product.find("span", "ct-tile--price-primary").find("span", "ct-price-formatted").text)[2:-1] + "€"
+        try:
+            preco_antigo = ((product.find("span", "ct-tile--price-dashed").text).split("\n\n")[2])[1:] + "€"
+        except:
+            preco_antigo = None
+        quantidade = product.find("p", "ct-tile--quantity").text
+        try:
+            precoPorQuantidade = (product.find("div", "ct-tile--price-secondary").find("span", "ct-price-value").text)[2:-1] + "€"
+            precoPorQuantidadeUnidade = (product.find("div", "ct-tile--price-secondary").find("span", "ct-m-unit").text)[1:-1]
+            precoPorQuantidadeConcat = precoPorQuantidade + precoPorQuantidadeUnidade
+        except:
+            precoPorQuantidadeConcat = None
+        print(f"{marca} - {description} - {preco}")
+        objeto = {
+            "marca": marca,
+            "descricao": description,
+            "preco": preco,
+            "preco_antigo": preco_antigo,
+            "quantidade": quantidade,
+            "precoPorQuantidade": precoPorQuantidadeConcat,
+            "link": link,
+            "imagem": image
+        }
+        path = search_path(res, urls[i])
+        path.append(objeto)
+        productCount += 1
 
     try:
         resultsFound = soup.find("div", class_="search-results-products-counter").text
@@ -61,8 +115,15 @@ while(True):
         page = requests.get(f"https://www.continente.pt/{urls[i]}?start={resultsFound[0]}&srule=price-per-capacity")
         flag = 1
     except:
-        print("Pesquisa finalizada")
-        input("Pressione qualquer tecla para continuar...")
+        #print("Pesquisa finalizada")
+        #input("Pressione qualquer tecla para continuar...")
         page = requests.get("https://www.continente.pt/" + urls[i] + "?start=0&srule=price-per-capacity")
         flag = 0
         i += 1
+
+
+with open("items.json", "w") as f:
+    json.dump(res, f, indent=4, ensure_ascii=False)
+
+print("Fim da pesquisa")
+print("Quantidade de produtos encontrados: " + str(productCount))
