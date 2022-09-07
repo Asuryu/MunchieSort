@@ -7,6 +7,9 @@ const fs = require('fs');
 autoUpdater.logger = require('electron-log');
 autoUpdater.logger.transports.file.level = 'info';
 
+var rawdata = fs.readFileSync('items.json', 'utf8')
+var data = JSON.parse(rawdata);
+
 function createWindow () {
     mainWindow = new BrowserWindow({
         width: 1280,
@@ -19,8 +22,8 @@ function createWindow () {
         backgroundColor: '#181818',
         webPreferences: {
             contextIsolation: true,
-            nodeIntegration: true,
-            enableRemoteModule: true,
+            nodeIntegration: false,
+            enableRemoteModule: false,
             preload: path.join(__dirname, 'preload.js')
         },
         icon: __dirname + "/assets/favicon.ico"
@@ -84,6 +87,9 @@ ipcMain.on('getVersion', (e) => {
 })
 ipcMain.on('isDev', (e) => {
     e.reply('dev', isDev)
+})
+ipcMain.on('getItems', (e) => {
+    e.reply('items', data)
 })
 ipcMain.on('closeApp', (e) => {
     app.quit();
