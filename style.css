@@ -155,9 +155,18 @@ navbar{
     cursor: pointer;
     background-color: #181818;
 }
-.card .icon{
-    position: absolute;
-    top: 20px;
+.card .content{
+    position: relative;
+    z-index: 995;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+.card .content .icon{
+    position: relative;
+    top: 18px;
     left: 50%;
     transform: translate(-50%, 0%);
     width: 50px;
@@ -166,9 +175,9 @@ navbar{
     border-radius: 50%;
     border: 3px solid white;
 }
-.card h1{
-    position: absolute;
-    top: 70px;
+.card .content h1{
+    position: relative;
+    top: 10px;
     left: 50%;
     transform: translate(-50%, 0%);
     color: white;
@@ -176,9 +185,9 @@ navbar{
     font-size: 20px;
     font-family: AdiNeueBold;
 }
-.card p{
-    position: absolute;
-    top: 95px;
+.card .content p{
+    position: relative;
+    top: 0px;
     left: 50%;
     transform: translate(-50%, 0%);
     color: #757575;
@@ -187,14 +196,38 @@ navbar{
     font-family: AdiNeueRegular;
 }
 .card .background{
-    transition: 0.2s;
-    opacity: 0.0;
-    position: absolute;
-    top: 0;
+    z-index: 994;
+    position: relative;
     left: 0;
+    top: calc(-100% - 12px);
+    opacity: 0.0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+.card .background div{
+    z-index: 993;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 7px;
+    background-color: #181818;
+    opacity: 0.9;
+    transition: 0.2s;
+}
+.card .background img{
+    z-index: 992;
+    transition: 0.2s;
+    opacity: 1.0;
+    position: absolute;
+    top: 0px;
+    left: 0px;
     width: 100%;
     height: 100%;
     border-radius: 8px;
     border: none;
-    background-size: 100% auto;
+    background-size: auto;
+    object-fit: cover;
 }
