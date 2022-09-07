@@ -1,3 +1,7 @@
+import requests
+from bs4 import BeautifulSoup
+import json
+
 urls = [
     "mercearia/cereais-e-barras/cereais-infantis-e-juvenis/",
     "mercearia/cereais-e-barras/barras-de-cereais/",
@@ -30,100 +34,98 @@ urls = [
     "congelados/hamburgueres-e-refeicoes/hamburgueres/"
 ]
 
-from math import prod
-import re
-from unittest import result
-import requests
-from bs4 import BeautifulSoup
-import json
-import matplotlib.pyplot as plt
-from PIL import Image
-
-res = {}
+itemsCount = 0
 i = 0
-flag = 0
-productCount = 0
+res = {}
 
-def recurse_setdefault(res, array):
-    if len(array) == 0:
-        return
-    elif len(array) == 1:
-        res.append(array[0])
-    else:
-        recurse_setdefault(res.setdefault(array[0], [] if len(array) == 2 else {}), array[1:])
-
-def search_path(res, path):
-    config = res
-    for i in path.split("/")[:-1]:
-        config = config[i]
-
-    return config
-
-for f in urls:
-    recurse_setdefault(res, f.split("/")) 
-    path = search_path(res, f)
-    path.pop(0)
-
-
-while(i < len(urls)):
-    if(flag == 0):
-        page = requests.get("https://www.continente.pt/" + urls[i] + "?start=0&srule=price-per-capacity")
+def get_category_name(url, index=0):
+    urlSplit = (url.split("/")[:-1])[0:index+1]
+    url = "/".join(urlSplit)
+    page = requests.get("https://www.continente.pt/" + url)
     soup = BeautifulSoup(page.content, 'html.parser')
-    products = soup.find_all('div', class_='product-tile')
     pageTitle = (soup.find("div", class_="search-results-title").find("h1").text)[1:-1]
-    print(pageTitle.upper() + ":")
+    return pageTitle
 
-    for product in products:
-        image = product.find("picture").find("img")["data-src"]
+def get_items(url):
+    objs = []
+    flag = 0
+    global itemsCount
+    while(True):
+        if(flag == 0):
+            page = requests.get("https://www.continente.pt/" + url + "?start=0&srule=price-per-capacity")
+        soup = BeautifulSoup(page.content, 'html.parser')
+        products = soup.find_all('div', class_='product-tile')
+        pageTitle = (soup.find("div", class_="search-results-title").find("h1").text)[1:-1]
+
+        for product in products:
+            image = product.find("picture").find("img")["data-src"]
+            try:
+                marca = product.find("p", "ct-tile--brand").text
+            except:
+                marca = ""
+            description = product.find("a", "ct-tile--description").text
+            link = product.find("a", "ct-tile--description")["href"]
+            preco = (product.find("span", "ct-tile--price-primary").find("span", "ct-price-formatted").text)[2:-1] + "€"
+            try:
+                preco_antigo = ((product.find("span", "ct-tile--price-dashed").text).split("\n\n")[2])[1:] + "€"
+            except:
+                preco_antigo = None
+            quantidade = product.find("p", "ct-tile--quantity").text
+            try:
+                precoPorQuantidade = (product.find("div", "ct-tile--price-secondary").find("span", "ct-price-value").text)[2:-1] + "€"
+                precoPorQuantidadeUnidade = (product.find("div", "ct-tile--price-secondary").find("span", "ct-m-unit").text)[1:-1]
+                precoPorQuantidadeConcat = precoPorQuantidade + precoPorQuantidadeUnidade
+            except:
+                precoPorQuantidadeConcat = None
+            print(f"{marca} - {description} - {preco}")
+            objeto = {
+                "marca": marca.replace("\n", ""),
+                "descricao": description.replace("\n", ""),
+                "preco": preco.replace("\n", ""),
+                "preco_antigo": preco_antigo.replace("\n", "") if preco_antigo != None else None,
+                "quantidade": quantidade.replace("\n", ""),
+                "precoPorQuantidade": precoPorQuantidadeConcat.replace("\n", "") if precoPorQuantidadeConcat != None else None,
+                "link": link,
+                "imagem": image
+            }
+            objs.append(objeto)
+            itemsCount += 1
+
         try:
-            marca = product.find("p", "ct-tile--brand").text
+            resultsFound = soup.find("div", class_="search-results-products-counter").text
+            resultsFound = [int(s) for s in resultsFound.split() if s.isdigit()]
+            print(f"\n{resultsFound[0]} de {resultsFound[1]} resultados encontrados")
+            page = requests.get(f"https://www.continente.pt/{url}?start={resultsFound[0]}&srule=price-per-capacity")
+            flag = 1
         except:
-            marca = ""
-        description = product.find("a", "ct-tile--description").text
-        link = product.find("a", "ct-tile--description")["href"]
-        preco = (product.find("span", "ct-tile--price-primary").find("span", "ct-price-formatted").text)[2:-1] + "€"
-        try:
-            preco_antigo = ((product.find("span", "ct-tile--price-dashed").text).split("\n\n")[2])[1:] + "€"
-        except:
-            preco_antigo = None
-        quantidade = product.find("p", "ct-tile--quantity").text
-        try:
-            precoPorQuantidade = (product.find("div", "ct-tile--price-secondary").find("span", "ct-price-value").text)[2:-1] + "€"
-            precoPorQuantidadeUnidade = (product.find("div", "ct-tile--price-secondary").find("span", "ct-m-unit").text)[1:-1]
-            precoPorQuantidadeConcat = precoPorQuantidade + precoPorQuantidadeUnidade
-        except:
-            precoPorQuantidadeConcat = None
-        print(f"{marca} - {description} - {preco}")
-        objeto = {
-            "marca": marca,
-            "descricao": description,
-            "preco": preco,
-            "preco_antigo": preco_antigo,
-            "quantidade": quantidade,
-            "precoPorQuantidade": precoPorQuantidadeConcat,
-            "link": link,
-            "imagem": image
-        }
-        path = search_path(res, urls[i])
-        path.append(objeto)
-        productCount += 1
-
-    try:
-        resultsFound = soup.find("div", class_="search-results-products-counter").text
-        resultsFound = [int(s) for s in resultsFound.split() if s.isdigit()]
-        print(f"\n{resultsFound[0]} de {resultsFound[1]} resultados encontrados")
-        page = requests.get(f"https://www.continente.pt/{urls[i]}?start={resultsFound[0]}&srule=price-per-capacity")
-        flag = 1
-    except:
-        #print("Pesquisa finalizada")
-        #input("Pressione qualquer tecla para continuar...")
-        page = requests.get("https://www.continente.pt/" + urls[i] + "?start=0&srule=price-per-capacity")
-        flag = 0
-        i += 1
+            return pageTitle, objs
 
 
-with open("items.json", "w") as f:
-    json.dump(res, f, indent=4, ensure_ascii=False)
+def create (path, dictionaryarray, url):
+    headarray = dictionaryarray
+    title, items = get_items(url)
+    for index, element in enumerate(path):
+        exists = 0
+        pageName = get_category_name(url, index)
+        for head in headarray:
+            if head['name'] == pageName:
+                head.setdefault('items',[])
+                headarray = head['items']
+                exists =1
+                break
+        if not exists:
+            if index == len(path) - 1: 
+                headarray.append({'name': title, "items": items})
+            else:
+                headarray.append({'name': pageName,'items':[]})
+                headarray=headarray[-1]['items']
 
-print("Fim da pesquisa")
-print("Quantidade de produtos encontrados: " + str(productCount))
+d = []
+for i in urls:
+    dict = create([j for j in i.split('/') if j != ''] ,d, i)
+    data={'items': d}
+
+with open("items_bu.json", "w") as f:
+    json.dump(data, f, indent=4, ensure_ascii=False)
+
+print(f"{itemsCount} produtos recolhidos para a base de dados")
