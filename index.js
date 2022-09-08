@@ -42,49 +42,6 @@ window.electronAPI.onError((_event, error) => {
 
 
 
-var currentPath = {};
-var previousPath = {};
-
-function callbackFunc(){
-    console.log("foydsf")
-    var id = $(this).attr("id");
-    console.log(Object.keys(currentPath[id]));
-    previousPath = currentPath;
-    currentPath = currentPath[id];
-    console.log(currentPath)
-    $("#grid-container").empty();
-    cardsFromObject(Object.keys(currentPath));
-}
-
-function cardsFromObject(keys) {
-    for(var item of keys){
-        $("#grid-container").append(`
-            <div class="card" id="${item}"
-            data-tilt data-tilt-glare data-tilt-max-glare="0.1" data-tilt-max="10" data-tilt-speed="1000">
-                <div class="content">
-                    <img class="icon" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
-                    <h1>${item.charAt(0).toUpperCase() + item.slice(1)}</h1>
-                    <p>Descrição</p>
-                </div>
-                <div class="background">
-                    <div class="darkner"></div>
-                    <img class="background" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
-                </div>
-            </div>
-        `);
-    }
-    $(".card").mouseenter(function(){
-        $(this).find(".background").css("opacity", "1.0");
-    }).mouseleave(function(){
-        $(this).find(".background").css("opacity", "0.0");
-    })
-    VanillaTilt.init(document.querySelectorAll(".card"), {
-        max: 10,
-        speed: 100,
-        glare: false
-    });
-    $(".card").click(callbackFunc)
-}
 
 $(document).ready(function() {
     var appVersion = window.electronAPI.getVersion();
@@ -116,8 +73,6 @@ $(document).ready(function() {
     }
 
     var items = window.electronAPI.getItems();
-    currentPath = items
-    var keys = Object.keys(currentPath);
-    cardsFromObject(keys);
-    $(".card").click(callbackFunc)
+
+    console.log(items.items[0])
 })
