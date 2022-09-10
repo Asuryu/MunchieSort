@@ -41,7 +41,65 @@ window.electronAPI.onError((_event, error) => {
 })
 
 
+var currentPath = {}
+var previousPath = {}
 
+function onCardClick() {
+    var id = $(this).attr('id');
+    previousPath = currentPath
+    currentPath = currentPath[id]["items"]
+    $("#grid-container").empty();
+    console.log(currentPath);
+    cardsFromObject(currentPath)
+}
+
+function cardsFromObject(currentPath){
+    console.log(currentPath.length);
+    for(var i = 0; i < currentPath.length; i++){
+        if(currentPath[i].name != undefined){
+            var itemHtml = `
+                <div class="card" id="${i}">
+                    <div class="content">
+                        <img class="icon" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
+                        <h1>${currentPath[i].name}</h1>
+                        <p>Descrição</p>
+                    </div>
+                    <div class="background">
+                        <div class="darkner"></div>
+                        <img class="background" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
+                    </div>
+                </div>
+            `;
+            $("#grid-container").append(itemHtml);
+        }else{  
+            var itemHtml = `
+                <div class="card" id="${i}">
+                    <div class="content">
+                        <img class="icon" src="${currentPath[i].imagem}">
+                        <a href="${currentPath[i].link}"><h1>${currentPath[i].descricao}</h1></a>
+                        <p>${currentPath[i].marca}</p>
+                    </div>
+                    <div class="background">
+                        <div class="darkner"></div>
+                        <img class="background" src="${currentPath[i].imagem}">
+                    </div>
+                </div>
+            `;
+            $("#grid-container").append(itemHtml);
+        }
+    }
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+        max: 11,
+        speed: 800,
+        glare: false
+    });
+    $(".card").mouseenter(function(){
+        $(this).find(".background").css("opacity", "1.0");
+    }).mouseleave(function(){
+        $(this).find(".background").css("opacity", "0.0");
+    });
+    $(".card").click(onCardClick);
+}
 
 $(document).ready(function() {
     var appVersion = window.electronAPI.getVersion();
@@ -72,7 +130,29 @@ $(document).ready(function() {
         window.electronAPI.checkForUpdates();
     }
 
-    var items = window.electronAPI.getItems();
-
-    console.log(items.items[0])
+    var data = window.electronAPI.getItems();
+    currentPath = data.items;
+    console.log(currentPath.length)
+    for(var i = 0; i < currentPath.length; i++){
+        var itemHtml = `
+            <div class="card" id="${i}">
+                <div class="content">
+                    <img class="icon" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
+                    <h1>${currentPath[i].name}</h1>
+                    <p>Descrição</p>
+                </div>
+                <div class="background">
+                    <div class="darkner"></div>
+                    <img class="background" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
+                </div>
+            </div>
+        `;
+        $("#grid-container").append(itemHtml);
+    }
+    $(".card").mouseenter(function(){
+        $(this).find(".background").css("opacity", "1.0");
+    }).mouseleave(function(){
+        $(this).find(".background").css("opacity", "0.0");
+    });
+    $(".card").click(onCardClick);
 })
