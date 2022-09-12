@@ -135,6 +135,59 @@ navbar{
     cursor: pointer;
 }
 
+#random{
+    transition: 0.1s;
+    position: absolute;
+    top: 50%;
+    right: 60px;
+    transform: translate(0%, -50%);
+    font-size: 21px;
+    color: rgb(201, 219, 180);
+    cursor: pointer;
+}
+#random:hover{
+    transition: 0.1s;
+    color: rgb(146, 192, 98);
+}
+
+.back{
+    position: absolute;
+    left: 210px;
+    top: 35px;
+    transform: translate(0%, -50%);
+    width: auto;
+    height: 20px;
+    background-color: #1f1f1f;
+    border-radius: 5px;
+}
+.back p{
+    position: relative;
+    top: 50%;
+    transform: translate(0%, -50%);
+    left: 27px;
+    color: white;
+    font-size: 13px;
+    font-family: AdiNeueRegular;
+    padding-right: 40px;
+    margin: 0;
+}
+.back #back{
+    transition: 0.1s;
+    position: absolute;
+    top: 50%;
+    left: 7px;
+    margin: 0;
+    padding: 0;
+    transform: translate(0%, -50%);
+    font-size: 13px;
+    color: rgb(177, 177, 177);
+    cursor: pointer;
+}
+#back:hover{
+    transition: 0.1s;
+    color: rgb(192, 154, 98);
+}  
+
 #closeBtn{
     z-index: 1000;
     transition: 0.1s;

@@ -43,13 +43,16 @@ window.electronAPI.onError((_event, error) => {
 
 var currentPath = {}
 var previousPath = {}
+var currentPathName = "Página Principal"
 
 function onCardClick() {
     var id = $(this).attr('id');
     previousPath = currentPath
+    console.log(currentPath[id].name);
+    currentPathName += " > " + currentPath[id].name;
+    $(".back p").text(currentPathName);
     currentPath = currentPath[id]["items"]
     $("#grid-container").empty();
-    console.log(currentPath);
     cardsFromObject(currentPath)
 }
 
@@ -132,7 +135,6 @@ $(document).ready(function() {
 
     var data = window.electronAPI.getItems();
     currentPath = data.items;
-    console.log(currentPath.length)
     for(var i = 0; i < currentPath.length; i++){
         var itemHtml = `
             <div class="card" id="${i}">
@@ -155,4 +157,13 @@ $(document).ready(function() {
         $(this).find(".background").css("opacity", "0.0");
     });
     $(".card").click(onCardClick);
+    $("#back").click(function() {
+        currentPath = previousPath
+        currentPathName = currentPathName.split(" > ").slice(0, -1).join(" > ");
+        $(".back p").text(currentPathName);
+        $("#grid-container").empty();
+        cardsFromObject(currentPath)
+    })
 })
+
+// IDEA: Make list of dictionaries for each path
