@@ -303,3 +303,111 @@ navbar{
     background-size: auto;
     object-fit: cover;
 }
+
+
+.productCard{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 220px;
+    z-index: 1000;
+    display: block;
+    border-radius: 8px;
+    background-color: #1b1b1b;
+    -webkit-box-shadow: 0px 0px 15px 0px #101010;
+    
+}
+
+.productCard img{
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translate(0%, -50%);
+    width: auto;
+    height: calc(100% - 20px);
+    border-radius: 10px;
+    object-fit: cover;
+    -webkit-box-shadow: 0px 0px 15px 0px #101010;
+}
+.productCard .close{
+    z-index: 501;
+    transition: 0.1s;
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+}
+.productCard .close:hover{
+    transition: 0.1s;
+    color: #ff3434;
+}
+.productInfo{
+    z-index: 500;
+}
+.productName{
+    position: relative;
+    top: 0px;
+    left: 235px;
+    width: 230px;
+    max-height: 87px;
+    color: white;
+    font-size: 23px;
+    overflow: hidden;
+    font-family: AdiNeueBold;
+}
+.productBrand{
+    position: relative;
+    top: 5px;
+    left: 235px;
+    width: 230px;
+    color: #bfbfbf;
+    font-size: 16px;
+    font-family: AdiNeueRegular;
+}
+.productPricePerQuantity{
+    position: absolute;
+    bottom: 32px;
+    left: 235px;
+    width: 230px;
+    color: #bfbfbf;
+    font-size: 13px;
+    font-family: AdiNeueRegular;
+}
+.productPrice{
+    position: absolute;
+    bottom: -10px;
+    left: 235px;
+    width: 230px;
+    color: white;
+    font-size: 25px;
+    font-family: AdiNeueBold;
+}
+.productCard .link{
+    transition: 0.1s;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #829620;
+    cursor: pointer;
+}
+.productCard .link:hover{
+    transition: 0.2s;
+    background-color: #68771c;
+}
+.productCard .link i{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 17px;
+    text-decoration: none;
+    cursor: pointer;
+}
