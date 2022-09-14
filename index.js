@@ -49,7 +49,7 @@ function onCardClick() {
     var id = $(this).attr('id');
     previousPath = currentPath
     console.log(currentPath[id].name);
-    currentPathName += " > " + currentPath[id].name;
+    currentPathName += ", " + currentPath[id].name;
     $(".back p").text(currentPathName);
     currentPath = currentPath[id]["items"]
     $("#grid-container").empty();
@@ -74,21 +74,30 @@ function cardsFromObject(currentPath){
                 </div>
             `;
             $("#grid-container").append(itemHtml);
+            $("#grid-container").css('grid-template-columns', "1fr 1fr 1fr 1fr");
+            $("#grid-container").css('grid-template-rows', "");
+            $("#random").hide();
         }else{  
             var itemHtml = `
-                <div class="card" id="${i}">
-                    <div class="content">
-                        <img class="icon" src="${currentPath[i].imagem}">
-                        <a href="${currentPath[i].link}"><h1>${currentPath[i].descricao}</h1></a>
-                        <p>${currentPath[i].marca}</p>
+                <div class="productCard">
+                    <img src="${currentPath[i].imagem}">
+                    <div class="productInfo">
+                        <p class="productBrand">${currentPath[i].marca}</p>
+                        <h1 class="productName">${currentPath[i].descricao}</h1>
+                        <p class="productPricePerQuantity">${currentPath[i].precoPorQuantidade + "(" + currentPath[i].quantidade + ")"}</p>
+                        <div class="productPrice">
+                            <p>${currentPath[i].preco}</p>
+                        </div>
                     </div>
-                    <div class="background">
-                        <div class="darkner"></div>
-                        <img class="background" src="${currentPath[i].imagem}">
+                    <div class="link" href="${currentPath[i].link}">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </div>
                 </div>
             `;
             $("#grid-container").append(itemHtml);
+            $("#grid-container").css('grid-template-columns', "1fr 1fr 1fr");
+            $("#grid-container").css('grid-template-rows', `repeat(${currentPath.length / 3}, 1fr)`);
+            $("#random").show();
         }
     }
     VanillaTilt.init(document.querySelectorAll(".card"), {
@@ -102,6 +111,15 @@ function cardsFromObject(currentPath){
         $(this).find(".background").css("opacity", "0.0");
     });
     $(".card").click(onCardClick);
+    $(".productCard .link").click(function(){
+        console.log($(this).attr("href"));
+        window.electronAPI.openExternal($(this).attr("href"));
+    });
+    $(".productCard").mouseenter(function(){
+        $(this).find(".link").show()
+    }).mouseleave(function(){
+        $(this).find(".link").hide()
+    });
 }
 
 $(document).ready(function() {
@@ -159,11 +177,40 @@ $(document).ready(function() {
     $(".card").click(onCardClick);
     $("#back").click(function() {
         currentPath = previousPath
-        currentPathName = currentPathName.split(" > ").slice(0, -1).join(" > ");
+        currentPathName = currentPathName.split(", ").slice(0, -1).join(", ");
         $(".back p").text(currentPathName);
         $("#grid-container").empty();
         cardsFromObject(currentPath)
     })
+    $("#random").click(function() {
+        var nrItems = currentPath.length;
+        var randomNumber = Math.floor(Math.random() * nrItems);
+        var itemNode = $("#grid-container").children()[randomNumber];
+        itemNode.scrollIntoView({
+            behavior: "smooth", // or "auto" or "instant"
+            block: "center" // or "end"
+        });
+        $(itemNode).css({
+            "background-color": "rgb(146, 192, 98, 0.2)"
+        })
+        setTimeout(function() {
+            $(itemNode).css({
+                "background-color": "#1b1b1b"
+            })
+        }, 2000);
+    })
+    $(window).scroll(function (event) {
+        var scroll = $(window).scrollTop();
+        if(scroll > 28){
+            $("navbar").css({
+                "box-shadow": "0px 3px 15px -1px #000000"
+            })
+        } else {
+            $("navbar").css({
+                "box-shadow": "none"
+            })
+        }
+    });
 })
 
 // IDEA: Make list of dictionaries for each path

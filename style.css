@@ -109,6 +109,7 @@ a{
 }
 
 #appVersion{
+    z-index: 1001;
     position: fixed;
     bottom: 10px;
     right: 10px;
@@ -119,11 +120,14 @@ a{
 }
 
 navbar{
-    position: absolute;
+    transition: 0.1s;
+    z-index: 1000;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 65px;
+    background-color: #181818;
 }
 
 #logo{
@@ -136,6 +140,7 @@ navbar{
 }
 
 #random{
+    display: none;
     transition: 0.1s;
     position: absolute;
     top: 50%;
@@ -205,14 +210,13 @@ navbar{
 }
 
 #grid-container{
+    z-index: 999;
     position: absolute;
     top: 75px;
     left: 0;
     width: calc(100vw - 30px);
-    height: auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
     grid-gap: 10px;
     padding: 15px;
 }
@@ -306,20 +310,25 @@ navbar{
 
 
 .productCard{
-    position: absolute;
-    top: 50%;
+    position: relative;
+    transition: 0.2s;
+    /* top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 500px;
-    height: 220px;
+    height: 220px; */
+    min-height: 140px;
     z-index: 1000;
     display: block;
     border-radius: 8px;
     background-color: #1b1b1b;
     -webkit-box-shadow: 0px 0px 15px 0px #101010;
-    
+    cursor: pointer;
 }
-
+.productCard:hover{
+    transition: 0.1s;
+    background-color: #252525;
+}
 .productCard img{
     position: absolute;
     top: 50%;
@@ -331,62 +340,49 @@ navbar{
     object-fit: cover;
     -webkit-box-shadow: 0px 0px 15px 0px #101010;
 }
-.productCard .close{
-    z-index: 501;
-    transition: 0.1s;
-    position: absolute;
-    top: 12px;
-    right: 15px;
-    font-size: 18px;
-    color: white;
-    cursor: pointer;
-}
-.productCard .close:hover{
-    transition: 0.1s;
-    color: #ff3434;
-}
 .productInfo{
     z-index: 500;
 }
 .productName{
     position: relative;
     top: 0px;
-    left: 235px;
-    width: 230px;
+    left: 145px;
+    width: calc(100% - 155px);
     max-height: 87px;
     color: white;
-    font-size: 23px;
+    font-size: 18px;
     overflow: hidden;
     font-family: AdiNeueBold;
 }
 .productBrand{
     position: relative;
     top: 5px;
-    left: 235px;
-    width: 230px;
-    color: #bfbfbf;
-    font-size: 16px;
-    font-family: AdiNeueRegular;
-}
-.productPricePerQuantity{
-    position: absolute;
-    bottom: 32px;
-    left: 235px;
+    left: 145px;
     width: 230px;
     color: #bfbfbf;
     font-size: 13px;
     font-family: AdiNeueRegular;
 }
+.productPricePerQuantity{
+    position: absolute;
+    bottom: 23px;
+    left: 145px;
+    width: 230px;
+    color: #bfbfbf;
+    font-size: 12px;
+    font-family: AdiNeueRegular;
+}
 .productPrice{
     position: absolute;
-    bottom: -10px;
-    left: 235px;
+    bottom: -15px;
+    left: 145px;
     width: 230px;
-    color: white;
-    font-size: 25px;
+    color: whitesmoke;
+    font-size: 22px;
     font-family: AdiNeueBold;
 }
 .productCard .link{
+    display: none;
     transition: 0.1s;
     position: absolute;
     bottom: 10px;
