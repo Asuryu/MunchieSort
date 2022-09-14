@@ -26,5 +26,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     isDev: () => isDev,
     getItems: () => data,
     closeApp: () => ipcRenderer.send('closeApp'),
+    openExternal: (url) => ipcRenderer.send('openExternal', url)
 })
 

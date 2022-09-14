@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow, ipcMain, shell} = require('electron');
 const { autoUpdater } = require("electron-updater");
 const isDev = require('electron-is-dev');
 const path = require('path');
@@ -90,6 +90,10 @@ ipcMain.on('isDev', (e) => {
 })
 ipcMain.on('getItems', (e) => {
     e.reply('items', data)
+})
+ipcMain.on('openExternal', (e, data) => {
+    shell.openExternal(data);
+    
 })
 ipcMain.on('closeApp', (e) => {
     app.quit();
