@@ -151,30 +151,61 @@ $(document).ready(function() {
         window.electronAPI.checkForUpdates();
     }
 
-    var data = window.electronAPI.getItems();
-    currentPath = data.items;
-    for(var i = 0; i < currentPath.length; i++){
-        var itemHtml = `
-            <div class="card" id="${i}">
-                <div class="content">
-                    <img class="icon" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
-                    <h1>${currentPath[i].name}</h1>
-                    <p>Descrição</p>
-                </div>
-                <div class="background">
-                    <div class="darkner"></div>
-                    <img class="background" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
-                </div>
-            </div>
-        `;
-        $("#grid-container").append(itemHtml);
-    }
-    $(".card").mouseenter(function(){
-        $(this).find(".background").css("opacity", "1.0");
-    }).mouseleave(function(){
-        $(this).find(".background").css("opacity", "0.0");
+    document.getElementById('updater').style.display = 'block';
+    document.getElementById('updater-text').style.color = '#BCDEFC';
+    document.getElementById('updater-info').style.color = '#90979D';
+    
+    document.getElementById('updater-text').innerHTML = 'Loading data...';
+    document.getElementById('updater-info').innerHTML = 'Wait while we fetch the data';
+    $.ajax({
+        url: "http://161.230.150.166:5000/api/v1/resources/items",
+        type: "GET",
+        timeout: 5000,
+        success: function(data) {
+            document.getElementById('updater').style.display = 'none';
+            currentPath = data.items;
+            for(var i = 0; i < currentPath.length; i++){
+                var itemHtml = `
+                    <div class="card" id="${i}">
+                        <div class="content">
+                            <img class="icon" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
+                            <h1>${currentPath[i].name}</h1>
+                            <p>Descrição</p>
+                        </div>
+                        <div class="background">
+                            <div class="darkner"></div>
+                            <img class="background" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
+                        </div>
+                    </div>
+                `;
+                $("#grid-container").append(itemHtml);
+            }
+            $(".card").mouseenter(function(){
+                $(this).find(".background").css("opacity", "1.0");
+            }).mouseleave(function(){
+                $(this).find(".background").css("opacity", "0.0");
+            });
+            $(".card").click(onCardClick);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if(textStatus == "timeout") {
+                document.getElementById('updater').style.display = 'block';
+                document.getElementById('updater-text').style.color = '#f1535a';
+                document.getElementById('updater-info').style.color = '#946f71';
+            
+                document.getElementById('updater-text').innerHTML = "Timeout";
+                document.getElementById('updater-info').innerHTML = 'Couldn\'t connect to the server';
+            }
+            else if(jqXHR.status == 404){
+                document.getElementById('updater').style.display = 'block';
+                document.getElementById('updater-text').style.color = '#f1535a';
+                document.getElementById('updater-info').style.color = '#946f71';
+            
+                document.getElementById('updater-text').innerHTML = 'Error 404';
+                document.getElementById('updater-info').innerHTML = 'Couldn\'t find what you\'re looking for';
+            }
+        }
     });
-    $(".card").click(onCardClick);
     $("#back").click(function() {
         currentPath = previousPath
         currentPathName = currentPathName.split(", ").slice(0, -1).join(", ");

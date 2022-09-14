@@ -7,9 +7,6 @@ const fs = require('fs');
 autoUpdater.logger = require('electron-log');
 autoUpdater.logger.transports.file.level = 'info';
 
-var rawdata = fs.readFileSync('items.json', 'utf8')
-var data = JSON.parse(rawdata);
-
 function createWindow () {
     mainWindow = new BrowserWindow({
         width: 1280,
@@ -31,9 +28,7 @@ function createWindow () {
   
     // and load the index.html of the app.
     mainWindow.loadFile('index.html');
-  
-    mainWindow.webContents.openDevTools();
-  
+    
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
       app.quit();
@@ -43,8 +38,11 @@ function createWindow () {
 
 app.whenReady().then(() => {
     createWindow();
+
     if(!isDev) {
         autoUpdater.checkForUpdates();
+    } else {
+        mainWindow.webContents.openDevTools();
     }
 });
 
@@ -88,12 +86,8 @@ ipcMain.on('getVersion', (e) => {
 ipcMain.on('isDev', (e) => {
     e.reply('dev', isDev)
 })
-ipcMain.on('getItems', (e) => {
-    e.reply('items', data)
-})
 ipcMain.on('openExternal', (e, data) => {
     shell.openExternal(data);
-    
 })
 ipcMain.on('closeApp', (e) => {
     app.quit();
