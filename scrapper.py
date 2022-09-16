@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import schedule
+import time
 
 urls = [
     "mercearia/cereais-e-barras/cereais-infantis-e-juvenis/",
@@ -33,10 +35,6 @@ urls = [
     "congelados/douradinhos-e-nuggets/",
     "congelados/hamburgueres-e-refeicoes/hamburgueres/"
 ]
-
-itemsCount = 0
-i = 0
-res = {}
 
 def get_category_name(url, index=0):
     urlSplit = (url.split("/")[:-1])[0:index+1]
@@ -120,12 +118,24 @@ def create (path, dictionaryarray, url):
                 headarray.append({'name': pageName,'items':[]})
                 headarray=headarray[-1]['items']
 
-d = []
-for i in urls:
-    dict = create([j for j in i.split('/') if j != ''] ,d, i)
-    data={'items': d}
+def job():
+    itemsCount = 0
+    i = 0
+    res = {}
+    d = []
+    for i in urls:
+        dict = create([j for j in i.split('/') if j != ''] ,d, i)
+        data={'items': d}
 
-with open("items_bu.json", "w") as f:
-    json.dump(data, f, indent=4, ensure_ascii=False)
+    with open("items_bu.json", "w") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
-print(f"{itemsCount} produtos recolhidos para a base de dados")
+    print(f"{itemsCount} produtos recolhidos para a base de dados")
+
+
+#job()
+schedule.every(7).days.at("00:05").do(job)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
