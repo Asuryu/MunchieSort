@@ -41,23 +41,32 @@ window.electronAPI.onError((_event, error) => {
 })
 
 
-var currentPath = {}
-var previousPath = {}
+var mainPath;
+var currentPath;
+var path = []
 var currentPathName = "Página Principal"
 
 function onCardClick() {
     var id = $(this).attr('id');
-    previousPath = currentPath
-    console.log(currentPath[id].name);
     currentPathName += ", " + currentPath[id].name;
     $(".back p").text(currentPathName);
-    currentPath = currentPath[id]["items"]
     $("#grid-container").empty();
+    path.push(currentPath[id]["items"])
+    currentPath = path.at(-1)
+    if(currentPath == mainPath){
+        $("#back").hide();
+        $("#home").show();
+    } else {
+        $("#back").show();
+        $("#home").hide();
+    }
     cardsFromObject(currentPath)
 }
 
 function cardsFromObject(currentPath){
-    console.log(currentPath.length);
+    if(currentPath == undefined) {
+        currentPath = mainPath;
+    }
     for(var i = 0; i < currentPath.length; i++){
         if(currentPath[i].name != undefined){
             var itemHtml = `
@@ -158,7 +167,9 @@ $(document).ready(function() {
         timeout: 5000,
         success: function(data) {
             document.getElementById('updater').style.display = 'none';
-            currentPath = data.items;
+            mainPath = data.items;
+            path.push(data.items);
+            currentPath = path.at(-1);
             for(var i = 0; i < currentPath.length; i++){
                 var itemHtml = `
                     <div class="card" id="${i}">
@@ -206,10 +217,18 @@ $(document).ready(function() {
         window.electronAPI.closeApp();
     })
     $("#back").click(function() {
-        currentPath = previousPath
+        path.pop()
+        currentPath = path.at(-1);
         currentPathName = currentPathName.split(", ").slice(0, -1).join(", ");
         $(".back p").text(currentPathName);
         $("#grid-container").empty();
+        if(currentPath == mainPath){
+            $("#back").hide();
+            $("#home").show();
+        } else {
+            $("#back").show();
+            $("#home").hide();
+        }
         cardsFromObject(currentPath)
     })
     $("#random").click(function() {

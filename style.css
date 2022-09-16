@@ -178,6 +178,7 @@ navbar{
     margin: 0;
 }
 .back #back{
+    display: none;
     transition: 0.1s;
     position: absolute;
     top: 50%;
@@ -193,6 +194,23 @@ navbar{
     transition: 0.1s;
     color: rgb(192, 154, 98);
 }  
+.back #home{
+    display: block;
+    transition: 0.1s;
+    position: absolute;
+    top: 50%;
+    left: 7px;
+    margin: 0;
+    padding: 0;
+    transform: translate(0%, -50%);
+    font-size: 13px;
+    color: rgb(177, 177, 177);
+    cursor: pointer;
+}
+#home:hover{
+    transition: 0.1s;
+    color: rgb(192, 154, 98);
+}
 
 #closeBtn{
     z-index: 1000;
