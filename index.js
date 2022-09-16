@@ -142,21 +142,16 @@ $(document).ready(function() {
         $('#intro-video').hide();
         $('#content').fadeIn();
         $('#background').fadeOut();
-    })
-    $("#closeBtn").click(function() {
-        window.electronAPI.closeApp();
+
+        document.getElementById('updater').style.zIndex = "800";
+        document.getElementById('updater').style.display = 'block';
+        document.getElementById('updater-text').style.color = '#BCDEFC';
+        document.getElementById('updater-info').style.color = '#90979D';
+        
+        document.getElementById('updater-text').innerHTML = 'Loading data...';
+        document.getElementById('updater-info').innerHTML = 'Wait while we fetch the data';
     })
 
-    function update() {
-        window.electronAPI.checkForUpdates();
-    }
-
-    document.getElementById('updater').style.display = 'block';
-    document.getElementById('updater-text').style.color = '#BCDEFC';
-    document.getElementById('updater-info').style.color = '#90979D';
-    
-    document.getElementById('updater-text').innerHTML = 'Loading data...';
-    document.getElementById('updater-info').innerHTML = 'Wait while we fetch the data';
     $.ajax({
         url: "http://161.230.150.166:5000/api/v1/resources/items",
         type: "GET",
@@ -206,6 +201,10 @@ $(document).ready(function() {
             }
         }
     });
+
+    $("#closeBtn").click(function() {
+        window.electronAPI.closeApp();
+    })
     $("#back").click(function() {
         currentPath = previousPath
         currentPathName = currentPathName.split(", ").slice(0, -1).join(", ");
