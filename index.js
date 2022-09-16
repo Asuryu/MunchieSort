@@ -72,13 +72,13 @@ function cardsFromObject(currentPath){
             var itemHtml = `
                 <div class="card" id="${i}">
                     <div class="content">
-                        <img class="icon" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
+                        <img class="icon" src="${currentPath[i].image_url != null ? currentPath[i].image_url : "https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg"}">
                         <h1>${currentPath[i].name}</h1>
                         <p>Descrição</p>
                     </div>
                     <div class="background">
                         <div class="darkner"></div>
-                        <img class="background" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
+                        <img class="background" src="${currentPath[i].image_url != null ? currentPath[i].image_url : "https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg"}">
                     </div>
                 </div>
             `;
@@ -166,13 +166,13 @@ $(document).ready(function() {
                 var itemHtml = `
                     <div class="card" id="${i}">
                         <div class="content">
-                            <img class="icon" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
+                            <img class="icon" src="${currentPath[i].image_url != null ? currentPath[i].image_url : "https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg"}">
                             <h1>${currentPath[i].name}</h1>
                             <p>Descrição</p>
                         </div>
                         <div class="background">
                             <div class="darkner"></div>
-                            <img class="background" src="https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg">
+                            <img class="background" src="${currentPath[i].image_url != null ? currentPath[i].image_url : "https://www.drbarakat.com.br/wp-content/uploads/2022/05/fast-food.jpg"}">
                         </div>
                     </div>
                 `;
@@ -228,8 +228,8 @@ $(document).ready(function() {
         var randomNumber = Math.floor(Math.random() * nrItems);
         var itemNode = $("#grid-container").children()[randomNumber];
         itemNode.scrollIntoView({
-            behavior: "smooth", // or "auto" or "instant"
-            block: "center" // or "end"
+            behavior: "smooth",
+            block: "center"
         });
         $(itemNode).css({
             "background-color": "rgb(146, 192, 98, 0.2)"
@@ -253,5 +253,3 @@ $(document).ready(function() {
         }
     });
 })
-
-// IDEA: Make list of dictionaries for each path

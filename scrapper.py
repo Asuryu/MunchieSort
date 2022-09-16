@@ -1,8 +1,11 @@
+from concurrent.futures import process
 import requests
 from bs4 import BeautifulSoup
 import json
 import schedule
 import time
+
+lastKnownUrl = ""
 
 urls = [
     "mercearia/cereais-e-barras/cereais-infantis-e-juvenis/",
@@ -37,12 +40,18 @@ urls = [
 ]
 
 def get_category_name(url, index=0):
+    global lastKnownUrl
     urlSplit = (url.split("/")[:-1])[0:index+1]
     url = "/".join(urlSplit)
     page = requests.get("https://www.continente.pt/" + url)
     soup = BeautifulSoup(page.content, 'html.parser')
     pageTitle = (soup.find("div", class_="search-results-title").find("h1").text)[1:-1]
-    return pageTitle
+    try:
+        pageImage = soup.find("picture").find("img", class_="img-fluid")['src']
+        lastKnownUrl = pageImage
+    except:
+        pageImage = lastKnownUrl
+    return pageTitle, pageImage
 
 def get_items(url):
     objs = []
@@ -88,7 +97,6 @@ def get_items(url):
             }
             objs.append(objeto)
             itemsCount += 1
-
         try:
             resultsFound = soup.find("div", class_="search-results-products-counter").text
             resultsFound = [int(s) for s in resultsFound.split() if s.isdigit()]
@@ -104,7 +112,7 @@ def create (path, dictionaryarray, url):
     title, items = get_items(url)
     for index, element in enumerate(path):
         exists = 0
-        pageName = get_category_name(url, index)
+        pageName, pageImage = get_category_name(url, index)
         for head in headarray:
             if head['name'] == pageName:
                 head.setdefault('items',[])
@@ -113,12 +121,13 @@ def create (path, dictionaryarray, url):
                 break
         if not exists:
             if index == len(path) - 1: 
-                headarray.append({'name': title, "items": items})
+                headarray.append({'name': title, 'image_url': pageImage, "items": items})
             else:
-                headarray.append({'name': pageName,'items':[]})
+                headarray.append({'name': pageName, 'image_url': pageImage, 'items':[]})
                 headarray=headarray[-1]['items']
 
 def job():
+    global itemsCount
     itemsCount = 0
     i = 0
     res = {}
@@ -130,11 +139,10 @@ def job():
     with open("items_bu.json", "w") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-    print(f"{itemsCount} produtos recolhidos para a base de dados")
+    print("Done")
 
-
-#job()
-schedule.every(7).days.at("00:05").do(job)
+job()
+schedule.every(7).days.at("00:01").do(job)
 
 while True:
     schedule.run_pending()
