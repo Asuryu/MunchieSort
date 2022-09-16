@@ -48,7 +48,7 @@ var currentPathName = "Página Principal"
 
 function onCardClick() {
     var id = $(this).attr('id');
-    currentPathName += ", " + currentPath[id].name;
+    currentPathName += " • " + currentPath[id].name;
     $(".back p").text(currentPathName);
     $("#grid-container").empty();
     path.push(currentPath[id]["items"])
@@ -151,14 +151,6 @@ $(document).ready(function() {
         $('#intro-video').hide();
         $('#content').fadeIn();
         $('#background').fadeOut();
-
-        document.getElementById('updater').style.zIndex = "800";
-        document.getElementById('updater').style.display = 'block';
-        document.getElementById('updater-text').style.color = '#BCDEFC';
-        document.getElementById('updater-info').style.color = '#90979D';
-        
-        document.getElementById('updater-text').innerHTML = 'Loading data...';
-        document.getElementById('updater-info').innerHTML = 'Wait while we fetch the data';
     })
 
     $.ajax({
@@ -219,7 +211,7 @@ $(document).ready(function() {
     $("#back").click(function() {
         path.pop()
         currentPath = path.at(-1);
-        currentPathName = currentPathName.split(", ").slice(0, -1).join(", ");
+        currentPathName = currentPathName.split(" • ").slice(0, -1).join(" • ");
         $(".back p").text(currentPathName);
         $("#grid-container").empty();
         if(currentPath == mainPath){
