@@ -1,6 +1,6 @@
 {
   "name": "munchiesort",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A aplicação MunchieSort obtém os produtos mais baratos para combater os munchies",
   "main": "main.js",
   "scripts": {
