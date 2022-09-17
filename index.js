@@ -8,7 +8,6 @@ window.electronAPI.onUpdateAvailable((_event, info) => {
 })
 window.electronAPI.onUpdateNotAvailable((_event) => {
     document.getElementById('updater').style.display = 'none';
-    console.log("FIXE");
     $("#updater").fadeOut();
     $('#intro-video').show();
     $('#intro-video').get(0).play();
@@ -40,15 +39,84 @@ window.electronAPI.onError((_event, error) => {
 
 })
 
-
+const separator = "ㅤ•ㅤ"
+var randomEnabled = false
+var bag = []
+var itemsOnBag = 0;
 var mainPath;
 var currentPath;
 var path = []
 var currentPathName = "Página Principal"
 
+function addItemToBag(item, itemID){
+    if(!bag.includes(item)){
+        bag.push(item)
+        itemsOnBag++;
+        $("#bag-badge-text").text(itemsOnBag);
+        var itemHtml = `
+            <div id="${itemsOnBag}" productID=${itemID} class="bagItem">
+                <img src="${item.imagem}">
+                <div class="productInfo">
+                    <p class="productBrand">${item.marca}</p>
+                    <h1 class="productName">${item.descricao}</h1>
+                    <p class="productPricePerQuantity">${item.precoPorQuantidade + " (" + item.quantidade + ")"}</p>
+                    <div class="productPrice">
+                        <p>${item.preco}</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-trash trash"></i>
+            </div>
+        `;
+        $("#bag-contents .items").append(itemHtml)
+        $("#bag-contents .subtitle").text(bag.length + " items")
+    }
+    var itemPreco = item.preco.split("€")[0].replace(",", ".");
+    var itemPrecoFloat = parseFloat(itemPreco);
+    var totalPreco = parseFloat($("#bag-contents .total").text().split("€")[0].replace(",", "."));
+    var totalPrecoFloat = totalPreco + itemPrecoFloat;
+    $("#bag-contents .total").text(totalPrecoFloat.toFixed(2).replace(".", ","))
+
+    $("#bag-contents .items .bagItem .trash").unbind();
+    $("#bag-contents .items .bagItem .trash").click(function(){
+        var item = bag[$(this).parent().attr("id")-1];
+        var itemID = $(this).parent().attr("productID");
+        removeItemFromBag(item)
+        console.log(itemID)
+        $(".productCard#" + itemID + " #addToBag").removeClass("onbag");
+        $(".productCard#" + itemID + " #addToBag").hide();
+    });
+    if(itemsOnBag <= 0){
+        $("#bag-badge").hide();
+    } else $("#bag-badge").show();
+}
+
+function removeItemFromBag(item){
+    if(bag.indexOf(item) > -1){
+        $("#bag-contents .items").children().eq(bag.indexOf(item)).remove();
+
+        // subtract from .total
+        var itemPreco = item.preco.split("€")[0].replace(",", ".");
+        var itemPrecoFloat = parseFloat(itemPreco);
+        var totalPreco = parseFloat($("#bag-contents .total").text().split("€")[0].replace(",", "."));
+        var totalPrecoFloat = totalPreco - itemPrecoFloat;
+        $("#bag-contents .total").text(totalPrecoFloat.toFixed(2).replace(".", ","))
+
+        bag.splice(bag.indexOf(item), 1);
+        itemsOnBag--;
+        $("#bag-badge-text").text(itemsOnBag);
+        $("#bag-contents .subtitle").text(bag.length + " items")
+        for(var i = 0; i < bag.length; i++){
+            $("#bag-contents .items").children().eq(i).attr("id", i+1);
+        }
+    }
+    if(itemsOnBag <= 0){
+        $("#bag-badge").hide();
+    } else $("#bag-badge").show();
+}
+
 function onCardClick() {
     var id = $(this).attr('id');
-    currentPathName += " • " + currentPath[id].name;
+    currentPathName += separator + currentPath[id].name;
     $(".back p").text(currentPathName);
     $("#grid-container").empty();
     path.push(currentPath[id]["items"])
@@ -86,9 +154,10 @@ function cardsFromObject(currentPath){
             $("#grid-container").css('grid-template-columns', "1fr 1fr 1fr 1fr");
             $("#grid-container").css('grid-template-rows', "");
             $("#random").hide();
+            randomEnabled = false;
         }else{  
             var itemHtml = `
-                <div class="productCard">
+                <div id="${i}" class="productCard">
                     <img src="${currentPath[i].imagem}">
                     <div class="productInfo">
                         <p class="productBrand">${currentPath[i].marca}</p>
@@ -98,6 +167,7 @@ function cardsFromObject(currentPath){
                             <p>${currentPath[i].preco}</p>
                         </div>
                     </div>
+                    <i id="addToBag" class="fa-solid fa-bag-shopping"></i>
                     <div class="link" href="${currentPath[i].link}">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </div>
@@ -107,6 +177,12 @@ function cardsFromObject(currentPath){
             $("#grid-container").css('grid-template-columns', "1fr 1fr 1fr");
             $("#grid-container").css('grid-template-rows', `repeat(${currentPath.length / 3}, 1fr)`);
             $("#random").show();
+            randomEnabled = true;
+
+            if(bag.includes(currentPath[i])){
+                $(`#${i}`).find("#addToBag").addClass("onbag");
+                $(`#${i}`).find("#addToBag").show()
+            }
         }
     }
     VanillaTilt.init(document.querySelectorAll(".card"), {
@@ -121,14 +197,30 @@ function cardsFromObject(currentPath){
     });
     $(".card").click(onCardClick);
     $(".productCard .link").click(function(){
-        console.log($(this).attr("href"));
         window.electronAPI.openExternal($(this).attr("href"));
     });
     $(".productCard").mouseenter(function(){
         $(this).find(".link").show()
+        $(this).find("#addToBag").show()
     }).mouseleave(function(){
         $(this).find(".link").hide()
+        if($(this).find("#addToBag").hasClass("onbag")){
+            $(this).find("#addToBag").show()
+        } else {
+            $(this).find("#addToBag").hide()
+        }
     });
+    $(".productCard #addToBag").click(function() {
+        var itemId = $(this).parent().attr("id")
+        $(this).toggleClass("onbag");
+        var item = currentPath[itemId]
+        if($(this).hasClass("onbag")){
+            $(this).find("#addToBag").show()
+            addItemToBag(item, itemId);
+        } else {
+            removeItemFromBag(item);
+        }
+    })
 }
 
 $(document).ready(function() {
@@ -211,7 +303,7 @@ $(document).ready(function() {
     $("#back").click(function() {
         path.pop()
         currentPath = path.at(-1);
-        currentPathName = currentPathName.split(" • ").slice(0, -1).join(" • ");
+        currentPathName = currentPathName.split(separator).slice(0, -1).join(separator);
         $(".back p").text(currentPathName);
         $("#grid-container").empty();
         if(currentPath == mainPath){
@@ -239,6 +331,31 @@ $(document).ready(function() {
                 "background-color": "#1b1b1b"
             })
         }, 2000);
+    })
+    $("#bag").click(function() {
+        if($("#bag-contents").attr("class") == "hidden"){
+            $("#bag-contents").show()
+            $("#bag-contents").removeClass("hidden")
+            $(this).addClass("active")
+            $("#random").hide()
+            $('body, html').css({
+                backgroundColor: "#181818",
+                overflowX: 'hidden',
+                overflowY: 'hidden' 
+            });
+        } else {
+            $("#bag-contents").hide()
+            $("#bag-contents").addClass("hidden")
+            $(this).removeClass("active")
+            if(randomEnabled == true){
+                $("#random").show()
+            } else $("#random").hide()
+            $('body, html').css({
+                backgroundColor: "#181818",
+                overflowX: 'hidden',
+                overflowY: 'auto' 
+            });
+        }
     })
     $(window).scroll(function (event) {
         var scroll = $(window).scrollTop();

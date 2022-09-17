@@ -19,6 +19,11 @@
                 <i id="back" class="fa-solid fa-chevron-left"></i>
                 <p>Página Principal</p>
             </div>
+            <i id="bag" class="fa-solid fa-bag-shopping">
+                <div id="bag-badge">
+                    <p id="bag-badge-text">0</p>
+                </div>
+            </i>
             <i id="random" class="fa-solid fa-shuffle"></i>
             <i id="closeBtn" class="fa-solid fa-xmark"></i>
         </navbar>
@@ -26,8 +31,14 @@
         <div id="grid-container">
         </div>
     </div>
-    
 
+    <div id="bag-contents" class="hidden">
+        <h1 class="title"><i class="fa-solid fa-bag-shopping"></i>  Your Bag</h1>
+        <p class="subtitle">0 items</p>
+        <div class="items"></div>
+        <h1 class="total">0.00</h1>
+    </div>
+    
     <video id="intro-video">
         <source src="assets/intro.webm" type="video/webm"/>
         <source src="assets/intro.mov" type="video/quicktime"/>

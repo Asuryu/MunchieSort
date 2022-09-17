@@ -22,9 +22,10 @@ img {
     user-select: none;
 }
 
-body{
+html, body{
     background-color: #181818;
     overflow-x: hidden;
+    overflow-y: auto;
 }
 
 
@@ -145,7 +146,7 @@ navbar{
     transition: 0.1s;
     position: absolute;
     top: 50%;
-    right: 60px;
+    right: 95px;
     transform: translate(0%, -50%);
     font-size: 21px;
     color: rgb(201, 219, 180);
@@ -154,6 +155,197 @@ navbar{
 #random:hover{
     transition: 0.1s;
     color: rgb(146, 192, 98);
+}
+
+#bag{
+    display: block;
+    transition: 0.1s;
+    position: absolute;
+    top: 50%;
+    right: 60px;
+    transform: translate(0%, -50%);
+    font-size: 21px;
+    color: rgb(219, 200, 180);
+    cursor: pointer;
+}
+#bag:hover{
+    transition: 0.1s;
+    color: rgb(237, 184, 92);
+}
+#bag.active{
+    transition: 0.1s;
+    color: rgb(237, 184, 92);
+}
+#bag-badge{
+    display: none;
+    position: absolute;
+    top: 14px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #f1535a;
+}
+#bag-badge-text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 10px;
+    text-align: center;
+    font-family: AdiNeueRegular;
+    padding: 0;
+    margin: 0;
+}
+#bag-contents{
+    display: none;
+    z-index: 800;
+    transition: 0.2s;
+    position: fixed;
+    top: 32.5px;
+    right: 0;
+    width: 100vw;
+    height: calc(100vh - 32.5px);
+    border-radius: 8px;
+    background-color: #181818;
+}
+#bag-contents .title{
+    position: absolute;
+    top: 65px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    height: 65px;
+    color: #a0b923;
+    margin: 0;
+    padding: 0;
+    font-size: 30px;
+    text-align: center;
+    font-family: AdiNeueBold;
+}
+#bag-contents .subtitle{
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    height: 65px;
+    color: rgb(212, 212, 212);
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    text-align: center;
+    font-family: AdiNeueRegular;
+}
+#bag-contents .total{
+    position: absolute;
+    bottom: 27px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    color: rgb(212, 212, 212);
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    text-align: center;
+    font-family: AdiNeueBold;
+}
+#bag-contents .total::before{
+    content: "Total: ";
+    color: #a0b923;
+}
+#bag-contents .total::after{
+    content: "\20ac";
+}
+#bag-contents .items{
+    position: absolute;
+    display: flexbox;
+    flex-direction: row;
+    top: 140px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    width: 530px;
+    height: calc(100% - 220px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+#bag-contents .bagItem{
+    transition: 0.2s;
+    z-index: 801;
+    display: block;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    position: relative;
+    width: calc(100% - 30px);
+    height: 150px;
+    background-color: #212121;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.427);
+    border-radius: 8px;
+    padding: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+#bag-contents .bagItem:hover{
+    transition: 0.1s;
+    background-color: #191919;
+}
+#bag-contents .bagItem img{
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translate(0%, -50%);
+    width: 130px;
+    border-radius: 8px;
+}
+#bag-contents .bagItem .productBrand{
+    position: absolute;
+    top: 15px;
+    left: 155px;
+    font-size: 15px;
+    font-family: AdiNeueRegular;
+    padding: 0;
+    margin: 0;
+}
+#bag-contents .bagItem .productName{
+    position: absolute;
+    top: 35px;
+    left: 155px;
+    width: 280px;
+    overflow-wrap: break-word;
+    height: 47px;
+    font-size: 20px;
+    font-family: AdiNeueBold;
+    padding: 0;
+    margin: 0;
+}
+#bag-contents .bagItem .productPrice{
+    position: absolute;
+    bottom: -5px;
+    left: 155px;
+    font-size: 20px;
+    font-family: AdiNeueBold;
+    padding: 0;
+    margin: 0;
+}
+#bag-contents .bagItem .productPricePerQuantity{
+    position: absolute;
+    bottom: 38px;
+    left: 155px;
+    font-size: 12px;
+    font-family: AdiNeueRegular;
+    padding: 0;
+    margin: 0;
+}
+#bag-contents .bagItem .trash{
+    position: absolute;
+    top: 50%;
+    right: 30px;
+    transform: translate(0%, -50%);
+    font-size: 20px;
+    color: rgb(177, 177, 177);
+    cursor: pointer;
+}
+#bag-contents .bagItem .trash:hover{
+    color: rgb(237, 92, 92);
 }
 
 .back{
@@ -229,7 +421,7 @@ navbar{
 }
 
 #grid-container{
-    z-index: 999;
+    z-index: 799;
     position: absolute;
     top: 75px;
     left: 0;
@@ -427,4 +619,19 @@ navbar{
     font-size: 17px;
     text-decoration: none;
     cursor: pointer;
+}
+
+.productCard #addToBag{
+    display: none;
+    transition: 0.2s;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 17px;
+    color:rgb(219, 200, 180);
+    cursor: pointer;   
+}
+.productCard #addToBag:hover{
+    transition: 0.1s;
+    color:rgb(237, 184, 92);
 }
