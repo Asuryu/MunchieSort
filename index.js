@@ -80,10 +80,9 @@ function addItemToBag(item, itemID){
     $("#bag-contents .items .bagItem .trash").click(function(){
         var item = bag[$(this).parent().attr("id")-1];
         var itemID = $(this).parent().attr("productID");
+        $(".productCard#" + itemID).find("#addToBag").removeClass("onbag");
+        $(".productCard#" + itemID).find("#addToBag").hide()
         removeItemFromBag(item)
-        console.log(itemID)
-        $(".productCard#" + itemID + " #addToBag").removeClass("onbag");
-        $(".productCard#" + itemID + " #addToBag").hide();
     });
     if(itemsOnBag <= 0){
         $("#bag-badge").hide();
