@@ -296,6 +296,8 @@ $(document).ready(function() {
         }
     });
 
+    new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
+
     $("#closeBtn").click(function() {
         window.electronAPI.closeApp();
     })
