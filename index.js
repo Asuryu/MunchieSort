@@ -41,12 +41,14 @@ window.electronAPI.onError((_event, error) => {
 
 const separator = "ㅤ•ㅤ"
 var randomEnabled = false
+var qrCodeGenerated = false
 var bag = []
 var itemsOnBag = 0;
 var mainPath;
 var currentPath;
 var path = []
 var currentPathName = "Página Principal"
+var hash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 function addItemToBag(item, itemID){
     if(!bag.includes(item)){
@@ -296,7 +298,11 @@ $(document).ready(function() {
         }
     });
 
-    new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
+    //new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
+
+    new QRCode(document.getElementById("qrCode"), {
+        text: "http://192.168.1.85:25565/api/v1/resources/bag/" + hash,
+    });
 
     $("#closeBtn").click(function() {
         window.electronAPI.closeApp();
@@ -334,6 +340,7 @@ $(document).ready(function() {
         }, 2000);
     })
     $("#bag").click(function() {
+        console.log(bag)
         if($("#bag-contents").attr("class") == "hidden"){
             $("#bag-contents").show()
             $("#bag-contents").removeClass("hidden")
@@ -357,6 +364,29 @@ $(document).ready(function() {
                 overflowY: 'auto' 
             });
         }
+    })
+    $("#qrCodeBtn").click(function(){
+        var object = {
+            id: hash,
+            total: "2.50",
+            itemCount: bag.length,
+            items: bag
+        }
+        $.ajax({
+            url: "http://192.168.1.85:25565/api/v1/resources/bag",
+            type: "POST",
+            data: JSON.stringify(object),
+            contentType: "application/json",
+            timeout: 5000,
+            success: function(data) {
+                console.log(data)
+                var qrCode = new QRCode(document.getElementById("qrCode"), {
+                    text: "http://192.168.1.85:25565/api/v1/resources/bag/" + hash,
+                });
+                qrCodeGenerated = true;
+                $("#qrCode").fadeIn();
+            }
+        });
     })
     $(window).scroll(function (event) {
         var scroll = $(window).scrollTop();
