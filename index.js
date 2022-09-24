@@ -41,12 +41,14 @@ window.electronAPI.onError((_event, error) => {
 
 const separator = "ㅤ•ㅤ"
 var randomEnabled = false
+var qrCodeGenerated = false
 var bag = []
 var itemsOnBag = 0;
 var mainPath;
 var currentPath;
 var path = []
 var currentPathName = "Página Principal"
+var hash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 function addItemToBag(item, itemID){
     if(!bag.includes(item)){
@@ -110,7 +112,11 @@ function removeItemFromBag(item){
     }
     if(itemsOnBag <= 0){
         $("#bag-badge").hide();
-    } else $("#bag-badge").show();
+        $("#bag-contents .title").html(`<i id="qrCodeBtnn" class="fa-solid fa-bag-shopping"> </i>   Your Bag`)
+    } else {
+        $("#bag-badge").show();
+        $("#bag-contents .title").html(`<i id="qrCodeBtn" class="fa-solid fa-qrcode"> </i>   Your Bag`)
+    }
 }
 
 function onCardClick() {
@@ -222,6 +228,31 @@ function cardsFromObject(currentPath){
     })
 }
 
+function generateQrCode(){
+    $("#bag-contents .items").fadeOut();
+    var object = {
+        id: hash,
+        total: $("#bag-contents .total").text().split("€")[0].replace(",", "."),
+        itemCount: bag.length,
+        items: bag
+    }
+    $.ajax({
+        url: "http://161.230.150.166:5000/api/v1/resources/bag",
+        type: "POST",
+        data: JSON.stringify(object),
+        contentType: "application/json",
+        timeout: 5000,
+        success: function(data) {
+            console.log(data)
+            var qrCode = new QRCode(document.getElementById("qrCode"), {
+                text: "http://161.230.150.166:5000/api/v1/resources/bag/" + hash,
+            });
+            qrCodeGenerated = true;
+            $("#qrCode").fadeIn();
+        }
+    });
+}
+
 $(document).ready(function() {
     var appVersion = window.electronAPI.getVersion();
     var isDev = window.electronAPI.isDev();
@@ -293,6 +324,14 @@ $(document).ready(function() {
                 document.getElementById('updater-text').innerHTML = 'Error 404';
                 document.getElementById('updater-info').innerHTML = 'Couldn\'t find what you\'re looking for';
             }
+            else if(jqXHR.status == 503){
+                document.getElementById('updater').style.display = 'block';
+                document.getElementById('updater-text').style.color = '#f1535a';
+                document.getElementById('updater-info').style.color = '#946f71';
+            
+                document.getElementById('updater-text').innerHTML = 'Downtime';
+                document.getElementById('updater-info').innerHTML = 'The server is fetching new data. Downtime happens every Tuesday from 0AM to 00:15AM';
+            }
         }
     });
 
@@ -332,11 +371,18 @@ $(document).ready(function() {
         }, 2000);
     })
     $("#bag").click(function() {
+        console.log(bag)
         if($("#bag-contents").attr("class") == "hidden"){
             $("#bag-contents").show()
             $("#bag-contents").removeClass("hidden")
             $(this).addClass("active")
             $("#random").hide()
+            if(bag.length == 0){
+                $("#bag-contents .title").html(`<i id="qrCodeBtnn" class="fa-solid fa-bag-shopping"> </i>   Your Bag`)
+            } else {
+                $("#bag-contents .title").html(`<i id="qrCodeBtn" class="fa-solid fa-qrcode"> </i>   Your Bag`)
+                $("#qrCodeBtn").click(generateQrCode)
+            }
             $('body, html').css({
                 backgroundColor: "#181818",
                 overflowX: 'hidden',
@@ -356,6 +402,11 @@ $(document).ready(function() {
             });
         }
     })
+    $("#qrCodeBtn").click(generateQrCode);
+    $("#closeQR").click(function(){
+        $("#qrCode").fadeOut();
+        $("#bag-contents .items").fadeIn()
+    });
     $(window).scroll(function (event) {
         var scroll = $(window).scrollTop();
         if(scroll > 28){
