@@ -117,6 +117,7 @@ function removeItemFromBag(item){
         $("#bag-badge").show();
         $("#bag-contents .title").html(`<i id="qrCodeBtn" class="fa-solid fa-qrcode"> </i>   Your Bag`)
     }
+    $("#qrCodeBtn").click(generateQrCode);
 }
 
 function onCardClick() {
