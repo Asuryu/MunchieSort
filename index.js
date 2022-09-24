@@ -301,7 +301,7 @@ $(document).ready(function() {
     //new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
 
     new QRCode(document.getElementById("qrCode"), {
-        text: "http://192.168.1.85:25565/api/v1/resources/bag/" + hash,
+        text: "http://161.230.150.166:5000/api/v1/resources/bag/" + hash,
     });
 
     $("#closeBtn").click(function() {
@@ -373,7 +373,7 @@ $(document).ready(function() {
             items: bag
         }
         $.ajax({
-            url: "http://192.168.1.85:25565/api/v1/resources/bag",
+            url: "http://161.230.150.166:5000/api/v1/resources/bag",
             type: "POST",
             data: JSON.stringify(object),
             contentType: "application/json",
@@ -381,7 +381,7 @@ $(document).ready(function() {
             success: function(data) {
                 console.log(data)
                 var qrCode = new QRCode(document.getElementById("qrCode"), {
-                    text: "http://192.168.1.85:25565/api/v1/resources/bag/" + hash,
+                    text: "http://161.230.150.166:5000/api/v1/resources/bag/" + hash,
                 });
                 qrCodeGenerated = true;
                 $("#qrCode").fadeIn();
