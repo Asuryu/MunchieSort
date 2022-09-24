@@ -36,7 +36,7 @@ def save_bag():
     if is_time_between():
         return json.dumps({'error': 'service unavailable'}), 503
     else:
-        print(str(data['id']))
+        print(f"[ + ] Received bag: {data['id']} - {len(bags) + 1} bags stored")
         for bag in bags:
             if str(bag['id']) == str(data['id']):
                 bags.remove(bag)
@@ -61,5 +61,5 @@ def get_bag(id):
 
 if __name__ == "__main__":
     from waitress import serve
-    print("Starting server...")
+    print("[ * ] Starting server...")
     serve(app, host="0.0.0.0", port=5000)

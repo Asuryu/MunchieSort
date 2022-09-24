@@ -69,7 +69,8 @@
             width: 100vw;
             overflow-y: scroll;
             overflow-x: hidden;
-            height: calc(100vh - 10vh - 35px);        }
+            height: calc(100vh - 10vh - 35px);        
+        }
         #bag-contents .bagItem{
             transition: 0.2s;
             z-index: 801;
@@ -101,9 +102,9 @@
         }
         #bag-contents .bagItem .productBrand{
             position: absolute;
-            top: 15px;
-            left: 155px;
-            font-size: 12px;
+            top: 30px;
+            left: 310px;
+            font-size: 30px;
             font-family: 'Roboto', sans-serif;
             font-weight: 400;
             padding: 0;
@@ -112,13 +113,14 @@
         }
         #bag-contents .bagItem .productName{
             position: absolute;
-            top: 35px;
-            left: 155px;
-            width: 170px;
+            top: 70px;
+            left: 310px;
+            width: calc(100% - 330px);
+            max-height: 100px;
             overflow: hidden;
             white-space: wrap;
             text-overflow: clip;
-            font-size: 17px;
+            font-size: 40px;
             font-family: 'Roboto', sans-serif;
             font-weight: 700;
             padding: 0;
@@ -127,9 +129,9 @@
         }
         #bag-contents .bagItem .productPrice{
             position: absolute;
-            bottom: -5px;
-            left: 155px;
-            font-size: 20px;
+            bottom: -30px;
+            left: 310px;
+            font-size: 50px;
             font-family: 'Roboto', sans-serif;
             font-weight: 700;
             padding: 0;
@@ -138,9 +140,9 @@
         }
         #bag-contents .bagItem .productPricePerQuantity{
             position: absolute;
-            bottom: 38px;
-            left: 155px;
-            font-size: 12px;
+            bottom: 80px;
+            left: 310px;
+            font-size: 30px;
             font-family: 'Roboto', sans-serif;
             font-weight: 400;
             padding: 0;
@@ -156,6 +158,7 @@
                 <div class="productInfo">
                     <p class="productBrand">{{item["marca"]}}</p>
                     <h1 class="productName">{{item["descricao"]}}</h1>
+                    <p class="productPricePerQuantity">{{item["precoPorQuantidade"] + "(" + item["quantidade"] + ")"}}</p>
                     <div class="productPrice">
                         <p>{{item["preco"]}}</p>
                     </div>

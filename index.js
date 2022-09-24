@@ -243,7 +243,6 @@ function generateQrCode(){
         contentType: "application/json",
         timeout: 5000,
         success: function(data) {
-            console.log(data)
             var qrCode = new QRCode(document.getElementById("qrCode"), {
                 text: "http://161.230.150.166:5000/api/v1/resources/bag/" + hash,
             });
@@ -371,7 +370,6 @@ $(document).ready(function() {
         }, 2000);
     })
     $("#bag").click(function() {
-        console.log(bag)
         if($("#bag-contents").attr("class") == "hidden"){
             $("#bag-contents").show()
             $("#bag-contents").removeClass("hidden")
