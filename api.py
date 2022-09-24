@@ -59,4 +59,6 @@ def get_bag(id):
             return json.dumps({'error': 'bag not found'}), 404
 
 
-app.run(host="192.168.1.85", port=25565)
+if __name__ == "__main__":
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=5000)
