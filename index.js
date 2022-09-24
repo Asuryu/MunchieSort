@@ -401,6 +401,7 @@ $(document).ready(function() {
             });
         }
     })
+    // TODO: Remove close button from QR Code. Instead, only have bag button and qr code button switching between each other
     $("#qrCodeBtn").click(generateQrCode);
     $("#closeQR").click(function(){
         $("#qrCode").fadeOut();
