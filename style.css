@@ -94,6 +94,7 @@ a{
     position: absolute;
     top: 120px;
     left: 50%;
+    width: 400px;
     transform: translate(-50%, 0%);
     color: #946f71;
     text-align: center;
@@ -387,6 +388,7 @@ navbar{
     transform: translate(-50%, -50%);
 }
 #qrCode #closeQR{
+    transition: 0.2s;
     position: absolute;
     top: -13px;
     right: -13px;
@@ -400,6 +402,10 @@ navbar{
     border-radius: 50%;
     font-size: 15px;
     color: white;
+}
+#qrCode #closeQR:hover{
+    transition: 0.1s;
+    background-color: rgb(237, 92, 92);
 }
 #qrCode #closeQR i{
     position: absolute;

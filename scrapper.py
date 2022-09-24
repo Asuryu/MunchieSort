@@ -106,7 +106,6 @@ def get_items(url):
         except:
             return pageTitle, objs
 
-
 def create (path, dictionaryarray, url):
     headarray = dictionaryarray
     title, items = get_items(url)
@@ -136,13 +135,13 @@ def job():
         dict = create([j for j in i.split('/') if j != ''] ,d, i)
         data={'items': d}
 
-    with open("items_bu.json", "w") as f:
+    with open("items.json", "w") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-    print("Done")
+    print("[ · ] Done! See you next thursday!")
 
 job()
-schedule.every(7).days.at("00:01").do(job)
+schedule.every().tuesday.at("00:02").do(job)
 
 while True:
     schedule.run_pending()
