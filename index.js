@@ -276,7 +276,7 @@ $(document).ready(function() {
     })
 
     $.ajax({
-        url: "http://161.230.150.166:5000/api/v1/resources/items",
+        url: "http://94.61.156.105:5000/api/v1/resources/items",
         type: "GET",
         timeout: 5000,
         success: function(data) {
